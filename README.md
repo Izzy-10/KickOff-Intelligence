@@ -76,7 +76,7 @@ The app is built to work for **any match globally**: PSL derbies, Champions Leag
 No build tools. No npm. Just open the file.
 
 ```bash
-https://github.com/Izzy-10/KickOff-Intelligence
+https://kick-off-intelligence.vercel.app
 cd kickoff-intelligence
 open index.html
 ```
