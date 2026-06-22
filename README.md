@@ -76,7 +76,7 @@ The app is built to work for **any match globally**: PSL derbies, Champions Leag
 No build tools. No npm. Just open the file.
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/kickoff-intelligence
+https://github.com/Izzy-10/KickOff-Intelligence
 cd kickoff-intelligence
 open index.html
 ```
