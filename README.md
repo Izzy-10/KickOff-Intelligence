@@ -67,7 +67,7 @@ The app is built to work for **any match globally**: PSL derbies, Champions Leag
 
 ## Live Demo
 
-🔗 [kickoff-intelligence.vercel.app](#) *(replace with your live URL)*
+🔗 https://github.com/Izzy-10/KickOff-Intelligence
 
 ---
 
