@@ -103,7 +103,7 @@ kickoff-intelligence/
 
 **Sizwe Sibiya** — Frontend Developer  
 WeThinkCode_ Durban | Co-founder, Sim Wear  
-GitHub: [@MUDESI-EASY]
+GitHub: [@EASY-10]
 
 ---
 
