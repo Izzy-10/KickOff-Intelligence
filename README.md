@@ -109,7 +109,7 @@ GitHub: [@EASY-10]
 
 ## Built For
 
-BemyApp Innovation Challenge — June 2025  
+BemyApp Innovation Challenge — June 2026  
 Theme: *AI Inside the Match*  
 Powered by IBM Granite
 
