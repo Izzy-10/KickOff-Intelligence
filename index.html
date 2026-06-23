@@ -1,5 +1,40 @@
-api/predict.js ✅ or ❌
-Have you uploaded      content: '';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KickOff Intelligence</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --pitch: #0a1f0f;
+      --surface: #0f2a15;
+      --card: #132d19;
+      --line: #1e4a28;
+      --grass: #1a5c28;
+      --gold: #c9a84c;
+      --gold-dim: #8a6f2e;
+      --white: #f0f4f1;
+      --muted: #6b8c72;
+      --danger: #e05252;
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    body {
+      background: var(--pitch);
+      color: var(--white);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* PITCH LINES BACKGROUND */
+    body::before {
+      content: '';
       position: fixed;
       inset: 0;
       background-image:
@@ -476,20 +511,14 @@ Respond ONLY with valid JSON in this exact format, no extra text, no markdown:
 }`;
 
     try {
-      const response = await fetch('https://claude.ai/api/anthropic/v1/messages', {
+      const response = await fetch('/api/predict', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-6',
-          max_tokens: 1000,
-          messages: [{ role: 'user', content: prompt }]
-        })
+        body: JSON.stringify({ home, away, competition, stage })
       });
 
-      const data = await response.json();
-      const raw = data.content.map(i => i.text || '').join('');
-      const clean = raw.replace(/```json|```/g, '').trim();
-      const result = JSON.parse(clean);
+      const result = await response.json();
+      if (result.error) throw new Error(result.error);
 
       const isHomeWinner = result.winner.toLowerCase().includes(home.toLowerCase());
       const isAwayWinner = result.winner.toLowerCase().includes(away.toLowerCase());
