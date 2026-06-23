@@ -1,0 +1,40 @@
+{
+  "buildCommand": "echo 'Build complete'",
+  "outputDirectory": "public",
+  "framework": "static",
+  "functions": {
+    "api/predict.js": {
+      "memory": 1024,
+      "maxDuration": 30
+    }
+  },
+  "headers": [
+    {
+      "source": "/api/:path*",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "POST, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type"
+        }
+      ]
+    }
+  ],
+  "env": {
+    "IBM_GRANITE_API_KEY": "@ibm_granite_api_key",
+    "ANTHROPIC_API_KEY": "@anthropic_api_key"
+  },
+  "buildCommand": "npm run build || echo 'No build script'",
+  "outputDirectory": "public"
+}
