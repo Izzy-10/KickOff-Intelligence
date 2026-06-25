@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="KickOff Intelligence - AI-powered football match predictions using IBM Granite" />
   <title>KickOff Intelligence</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <style>
@@ -150,10 +149,25 @@
       margin-bottom: 28px;
     }
 
-    .context-row > div {
-      display: flex;
-      flex-direction: column;
+    .context-row select {
+      width: 100%;
+      background: var(--pitch);
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 14px;
+      padding: 11px 14px;
+      outline: none;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b8c72' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      transition: border-color 0.2s;
     }
+
+    .context-row select:focus { border-color: var(--gold); }
 
     .context-row label {
       display: block;
@@ -164,26 +178,6 @@
       text-transform: uppercase;
       margin-bottom: 8px;
     }
-
-    .context-row select {
-      width: 100%;
-      background: var(--pitch) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b8c72' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat;
-      background-position: right 14px center;
-      border: 1px solid var(--line);
-      border-radius: 3px;
-      color: var(--white);
-      font-family: var(--font-body);
-      font-size: 14px;
-      padding: 11px 14px;
-      padding-right: 35px;
-      outline: none;
-      cursor: pointer;
-      appearance: none;
-      transition: border-color 0.2s;
-    }
-
-    .context-row select:focus { border-color: var(--gold); }
-    .context-row select:hover { border-color: var(--gold); }
 
     .predict-btn {
       width: 100%;
@@ -308,7 +302,6 @@
       line-height: 1.75;
       color: rgba(240,244,241,0.85);
       white-space: pre-wrap;
-      word-wrap: break-word;
     }
 
     /* FACTORS */
@@ -362,7 +355,6 @@
       font-size: 14px;
       color: var(--danger);
       font-family: var(--font-mono);
-      line-height: 1.6;
     }
 
     /* FOOTER */
@@ -398,7 +390,6 @@
       .context-row { grid-template-columns: 1fr; }
       .factors-wrap { grid-template-columns: 1fr; }
       .match-card { padding: 20px; }
-      footer { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
@@ -407,7 +398,7 @@
 
   <header>
     <div class="logo-row">
-      <div class="logo-icon" aria-label="Football emoji">⚽</div>
+      <div class="logo-icon">⚽</div>
       <div>
         <h1>KICKOFF <span>INTELLIGENCE</span></h1>
       </div>
@@ -415,62 +406,48 @@
     <p class="tagline">// AI-powered match prediction — powered by IBM Granite</p>
   </header>
 
-  <main class="match-card">
-    <form id="prediction-form" onsubmit="predict(event)">
-      <div class="vs-row">
-        <div class="team-input-group">
-          <label for="home-team">Home Team</label>
-          <input 
-            type="text" 
-            id="home-team" 
-            placeholder="e.g. Kaizer Chiefs"
-            aria-label="Home team name"
-            required 
-          />
-        </div>
-        <div class="vs-divider" aria-hidden="true">VS</div>
-        <div class="team-input-group">
-          <label for="away-team">Away Team</label>
-          <input 
-            type="text" 
-            id="away-team" 
-            placeholder="e.g. Orlando Pirates"
-            aria-label="Away team name"
-            required 
-          />
-        </div>
+  <div class="match-card">
+    <div class="vs-row">
+      <div class="team-input-group">
+        <label>Home Team</label>
+        <input type="text" id="home-team" placeholder="e.g. Kaizer Chiefs" />
       </div>
-
-      <div class="context-row">
-        <div>
-          <label for="competition">Competition</label>
-          <select id="competition" aria-label="Select competition">
-            <option value="PSL">PSL (South Africa)</option>
-            <option value="Premier League">Premier League</option>
-            <option value="Champions League">UEFA Champions League</option>
-            <option value="La Liga">La Liga</option>
-            <option value="AFCON">AFCON</option>
-            <option value="World Cup">FIFA World Cup</option>
-            <option value="Friendly">International Friendly</option>
-          </select>
-        </div>
-        <div>
-          <label for="stage">Match Stage</label>
-          <select id="stage" aria-label="Select match stage">
-            <option value="Regular Season">Regular Season</option>
-            <option value="Knockout">Knockout / Cup</option>
-            <option value="Derby">Derby Match</option>
-            <option value="Final">Final</option>
-            <option value="Relegation">Relegation Decider</option>
-          </select>
-        </div>
+      <div class="vs-divider">VS</div>
+      <div class="team-input-group">
+        <label>Away Team</label>
+        <input type="text" id="away-team" placeholder="e.g. Orlando Pirates" />
       </div>
+    </div>
 
-      <button type="submit" class="predict-btn" id="predict-btn">ANALYSE MATCH</button>
-    </form>
-  </main>
+    <div class="context-row">
+      <div>
+        <label>Competition</label>
+        <select id="competition">
+          <option value="PSL">PSL (South Africa)</option>
+          <option value="Premier League">Premier League</option>
+          <option value="Champions League">UEFA Champions League</option>
+          <option value="La Liga">La Liga</option>
+          <option value="AFCON">AFCON</option>
+          <option value="World Cup">FIFA World Cup</option>
+          <option value="Friendly">International Friendly</option>
+        </select>
+      </div>
+      <div>
+        <label>Match Stage</label>
+        <select id="stage">
+          <option value="Regular Season">Regular Season</option>
+          <option value="Knockout">Knockout / Cup</option>
+          <option value="Derby">Derby Match</option>
+          <option value="Final">Final</option>
+          <option value="Relegation">Relegation Decider</option>
+        </select>
+      </div>
+    </div>
 
-  <div id="result" role="region" aria-live="polite" aria-label="Match prediction results">
+    <button class="predict-btn" id="predict-btn" onclick="predict()">ANALYSE MATCH</button>
+  </div>
+
+  <div id="result">
     <div class="result-card">
       <div id="result-inner"></div>
     </div>
@@ -484,13 +461,7 @@
 </div>
 
 <script>
-  // Configuration
-  const API_TIMEOUT = 30000; // 30 seconds timeout
-  const API_ENDPOINT = '/api/predict';
-
-  async function predict(event) {
-    event?.preventDefault?.();
-    
+  async function predict() {
     const home = document.getElementById('home-team').value.trim();
     const away = document.getElementById('away-team').value.trim();
     const competition = document.getElementById('competition').value;
@@ -510,155 +481,147 @@
     resultEl.style.display = 'block';
     inner.innerHTML = `
       <div class="loading-state">
-        <div class="loader" aria-label="Loading prediction"></div>
+        <div class="loader"></div>
         <p class="loading-text">IBM Granite is reading the match...</p>
       </div>`;
 
     resultEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), API_TIMEOUT);
+    const prompt = `You are an elite football analyst with deep knowledge of tactics, team form, and match psychology.
 
-      const response = await fetch(API_ENDPOINT, {
+Analyse this upcoming match and predict the outcome with reasoning:
+
+HOME TEAM: ${home}
+AWAY TEAM: ${away}
+COMPETITION: ${competition}
+STAGE: ${stage}
+
+Respond ONLY with valid JSON in this exact format, no extra text, no markdown:
+{
+  "winner": "team name or DRAW",
+  "home_win_probability": number between 0 and 100,
+  "draw_probability": number between 0 and 100,
+  "away_win_probability": number between 0 and 100,
+  "confidence": "HIGH" or "MEDIUM" or "LOW",
+  "predicted_score": "e.g. 2-1",
+  "key_factor": "single most decisive factor in 6 words or less",
+  "home_strength": "one short phrase",
+  "away_strength": "one short phrase",
+  "reasoning": "3-4 sentence tactical reasoning explaining why this outcome is likely. Be specific about playing styles, form, and match context."
+}`;
+
+    try {
+      const matchPrompt = `You are an elite football analyst. Predict this match outcome.
+HOME: ${home}, AWAY: ${away}, COMPETITION: ${competition}, STAGE: ${stage}
+Respond ONLY with JSON no markdown: {"winner":"team or DRAW","home_win_probability":0,"draw_probability":0,"away_win_probability":0,"confidence":"HIGH","predicted_score":"2-1","key_factor":"phrase","home_strength":"phrase","away_strength":"phrase","reasoning":"3 sentences"}`;
+
+      const response = await fetch('https://corsproxy.io/?' + encodeURIComponent('https://api.anthropic.com/v1/messages'), {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ home, away, competition, stage }),
-        signal: controller.signal
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': 'REPLACE_WITH_KEY',
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true'
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-6',
+          max_tokens: 1000,
+          messages: [{ role: 'user', content: matchPrompt }]
+        })
       });
 
-      clearTimeout(timeoutId);
+      const data = await response.json();
+      const raw = data.content.map(i => i.text || '').join('');
+      const clean = raw.replace(/```json|```/g, '').trim();
+      const result = JSON.parse(clean);
+      if (result.error) throw new Error(result.error);
 
-      if (!response.ok) {
-        throw new Error(`Server error: ${response.status} ${response.statusText}`);
-      }
+      const isHomeWinner = result.winner.toLowerCase().includes(home.toLowerCase());
+      const isAwayWinner = result.winner.toLowerCase().includes(away.toLowerCase());
+      const isDraw = result.winner === 'DRAW' || result.winner.toLowerCase() === 'draw';
 
-      const result = await response.json();
-      
-      if (result.error) {
-        throw new Error(result.error);
-      }
+      const winnerLabel = isDraw ? 'DRAW PREDICTED' : `${result.winner} TO WIN`;
+      const barWidth = isHomeWinner ? result.home_win_probability : isAwayWinner ? result.away_win_probability : result.draw_probability;
 
-      if (!result.winner || result.home_win_probability === undefined) {
-        throw new Error('Invalid response format from server');
-      }
+      inner.innerHTML = `
+        <div class="result-header">
+          <span class="result-title">MATCH PREDICTION</span>
+          <span class="confidence-badge">${result.confidence} CONFIDENCE</span>
+        </div>
 
-      renderPredictionResult(result, home, away, competition, stage);
+        <div class="verdict-row">
+          <div class="verdict-teams">
+            <span class="${isHomeWinner ? 'winner' : 'loser'}">${home}</span>
+            <span style="color:var(--muted);font-size:0.7em"> ${result.predicted_score} </span>
+            <span class="${isAwayWinner ? 'winner' : 'loser'}">${away}</span>
+          </div>
+          <div class="verdict-label">${winnerLabel}</div>
+        </div>
+
+        <div class="prob-bar-wrap">
+          <div class="prob-labels">
+            <span>${home} ${result.home_win_probability}%</span>
+            <span>Draw ${result.draw_probability}%</span>
+            <span>${away} ${result.away_win_probability}%</span>
+          </div>
+          <div class="prob-bar">
+            <div class="prob-fill" id="prob-fill"></div>
+          </div>
+        </div>
+
+        <div class="factors-wrap">
+          <div class="factor-chip">
+            <div class="fk">Key Factor</div>
+            <div class="fv">${result.key_factor}</div>
+          </div>
+          <div class="factor-chip">
+            <div class="fk">Competition</div>
+            <div class="fv">${competition} — ${stage}</div>
+          </div>
+          <div class="factor-chip">
+            <div class="fk">${home} Strength</div>
+            <div class="fv">${result.home_strength}</div>
+          </div>
+          <div class="factor-chip">
+            <div class="fk">${away} Strength</div>
+            <div class="fv">${result.away_strength}</div>
+          </div>
+        </div>
+
+        <div class="reasoning-wrap">
+          <div class="reasoning-label">// Tactical Breakdown</div>
+          <div id="reasoning-text"></div>
+        </div>`;
+
+      setTimeout(() => {
+        const fill = document.getElementById('prob-fill');
+        if (fill) fill.style.width = barWidth + '%';
+      }, 100);
+
+      // Typewriter effect for reasoning
+      const reasoningEl = document.getElementById('reasoning-text');
+      const text = result.reasoning;
+      let i = 0;
+      const type = () => {
+        if (i < text.length) {
+          reasoningEl.textContent += text[i++];
+          setTimeout(type, 12);
+        }
+      };
+      type();
 
     } catch (err) {
-      let errorMessage = 'Analysis failed. ';
-      
-      if (err.name === 'AbortError') {
-        errorMessage += 'Request took too long. Please try again.';
-      } else if (err instanceof TypeError) {
-        errorMessage += 'Network error. Check your connection.';
-      } else {
-        errorMessage += err.message || 'Unknown error occurred.';
-      }
-
-      inner.innerHTML = `<div class="error-state">⚠ ${errorMessage}</div>`;
+      inner.innerHTML = `<div class="error-state">⚠ Analysis failed. Check your connection and try again.<br><small>${err.message}</small></div>`;
     }
 
     btn.disabled = false;
     btn.textContent = 'ANALYSE MATCH';
   }
 
-  function renderPredictionResult(result, home, away, competition, stage) {
-    const inner = document.getElementById('result-inner');
-    
-    const isHomeWinner = result.winner.toLowerCase().includes(home.toLowerCase());
-    const isAwayWinner = result.winner.toLowerCase().includes(away.toLowerCase());
-    const isDraw = result.winner === 'DRAW' || result.winner.toLowerCase() === 'draw';
-
-    const winnerLabel = isDraw ? 'DRAW PREDICTED' : `${result.winner.toUpperCase()} TO WIN`;
-    const barWidth = isHomeWinner ? result.home_win_probability : isAwayWinner ? result.away_win_probability : result.draw_probability;
-
-    inner.innerHTML = `
-      <div class="result-header">
-        <span class="result-title">MATCH PREDICTION</span>
-        <span class="confidence-badge">${result.confidence || 'UNKNOWN'} CONFIDENCE</span>
-      </div>
-
-      <div class="verdict-row">
-        <div class="verdict-teams">
-          <span class="${isHomeWinner ? 'winner' : 'loser'}">${escapeHtml(home)}</span>
-          <span style="color:var(--muted);font-size:0.7em"> ${escapeHtml(result.predicted_score || '0-0')} </span>
-          <span class="${isAwayWinner ? 'winner' : 'loser'}">${escapeHtml(away)}</span>
-        </div>
-        <div class="verdict-label">${winnerLabel}</div>
-      </div>
-
-      <div class="prob-bar-wrap">
-        <div class="prob-labels">
-          <span>${escapeHtml(home)} ${Math.round(result.home_win_probability)}%</span>
-          <span>Draw ${Math.round(result.draw_probability)}%</span>
-          <span>${escapeHtml(away)} ${Math.round(result.away_win_probability)}%</span>
-        </div>
-        <div class="prob-bar">
-          <div class="prob-fill" id="prob-fill"></div>
-        </div>
-      </div>
-
-      <div class="factors-wrap">
-        <div class="factor-chip">
-          <div class="fk">Key Factor</div>
-          <div class="fv">${escapeHtml(result.key_factor || 'N/A')}</div>
-        </div>
-        <div class="factor-chip">
-          <div class="fk">Competition</div>
-          <div class="fv">${escapeHtml(competition)} — ${escapeHtml(stage)}</div>
-        </div>
-        <div class="factor-chip">
-          <div class="fk">${escapeHtml(home)} Strength</div>
-          <div class="fv">${escapeHtml(result.home_strength || 'N/A')}</div>
-        </div>
-        <div class="factor-chip">
-          <div class="fk">${escapeHtml(away)} Strength</div>
-          <div class="fv">${escapeHtml(result.away_strength || 'N/A')}</div>
-        </div>
-      </div>
-
-      <div class="reasoning-wrap">
-        <div class="reasoning-label">// Tactical Breakdown</div>
-        <div id="reasoning-text"></div>
-      </div>`;
-
-    // Animate probability bar
-    setTimeout(() => {
-      const fill = document.getElementById('prob-fill');
-      if (fill) fill.style.width = barWidth + '%';
-    }, 100);
-
-    // Typewriter effect for reasoning
-    const reasoningEl = document.getElementById('reasoning-text');
-    const text = result.reasoning || 'No reasoning available.';
-    let i = 0;
-    
-    const type = () => {
-      if (i < text.length) {
-        reasoningEl.textContent += text[i++];
-        setTimeout(type, 12);
-      }
-    };
-    type();
-  }
-
-  // Helper function to escape HTML special characters
-  function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-  }
-
   // Enter key support
   document.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && (e.target.id === 'home-team' || e.target.id === 'away-team')) {
-      predict();
-    }
+    if (e.key === 'Enter') predict();
   });
-
-  // Form submission
-  document.getElementById('prediction-form')?.addEventListener('submit', predict);
 </script>
 </body>
 </html>
