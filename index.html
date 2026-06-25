@@ -531,10 +531,10 @@ Respond ONLY with JSON no markdown: {"winner":"team or DRAW","home_win_probabili
       });
 
       const data = await response.json();
+      if (!response.ok || data.error) throw new Error(JSON.stringify(data.error || data));
       const raw = data.content.map(i => i.text || '').join('');
       const clean = raw.replace(/```json|```/g, '').trim();
       const result = JSON.parse(clean);
-      if (result.error) throw new Error(result.error);
 
       const isHomeWinner = result.winner.toLowerCase().includes(home.toLowerCase());
       const isAwayWinner = result.winner.toLowerCase().includes(away.toLowerCase());
