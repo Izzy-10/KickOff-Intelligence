@@ -519,7 +519,7 @@ Respond ONLY with JSON no markdown: {"winner":"team or DRAW","home_win_probabili
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': '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',
+          'x-api-key': 'REPLACE_WITH_KEY',
           'anthropic-version': '2023-06-01',
           'anthropic-dangerous-direct-browser-access': 'true'
         },
@@ -532,6 +532,7 @@ Respond ONLY with JSON no markdown: {"winner":"team or DRAW","home_win_probabili
 
       const data = await response.json();
       if (!response.ok || data.error) throw new Error(JSON.stringify(data.error || data));
+      if (!data.content) throw new Error('No content in response: ' + JSON.stringify(data));
       const raw = data.content.map(i => i.text || '').join('');
       const clean = raw.replace(/```json|```/g, '').trim();
       const result = JSON.parse(clean);
