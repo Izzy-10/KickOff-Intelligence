@@ -515,27 +515,14 @@ Respond ONLY with valid JSON in this exact format, no extra text, no markdown:
 HOME: ${home}, AWAY: ${away}, COMPETITION: ${competition}, STAGE: ${stage}
 Respond ONLY with JSON no markdown: {"winner":"team or DRAW","home_win_probability":0,"draw_probability":0,"away_win_probability":0,"confidence":"HIGH","predicted_score":"2-1","key_factor":"phrase","home_strength":"phrase","away_strength":"phrase","reasoning":"3 sentences"}`;
 
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
+      const response = await fetch('/api/predict', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key':'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',
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-access': 'true'
-        },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-6',
-          max_tokens: 1000,
-          messages: [{ role: 'user', content: matchPrompt }]
-        })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ home, away, competition, stage })
       });
 
-      const data = await response.json();
-      if (!response.ok || data.error) throw new Error(JSON.stringify(data.error || data));
-      if (!data.content) throw new Error('No content in response: ' + JSON.stringify(data));
-      const raw = data.content.map(i => i.text || '').join('');
-      const clean = raw.replace(/```json|```/g, '').trim();
-      const result = JSON.parse(clean);
+      const result = await response.json();
+      if (result.error) throw new Error(result.error);
 
       const isHomeWinner = result.winner.toLowerCase().includes(home.toLowerCase());
       const isAwayWinner = result.winner.toLowerCase().includes(away.toLowerCase());
