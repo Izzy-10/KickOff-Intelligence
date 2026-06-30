@@ -1,4 +1,5 @@
 export default async function handler(req, res) {
+  // Allow CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -9,15 +10,28 @@ export default async function handler(req, res) {
   try {
     const { home, away, competition, stage } = req.body;
 
-    const prompt = `You are an elite football analyst. Analyse this match and predict the outcome.
+    const prompt = `You are an elite football analyst with deep knowledge of tactics, team form, and match psychology.
+
+Analyse this upcoming match and predict the outcome with reasoning:
 
 HOME TEAM: ${home}
 AWAY TEAM: ${away}
 COMPETITION: ${competition}
 STAGE: ${stage}
 
-Respond ONLY with valid JSON, no markdown:
-{"winner":"team name or DRAW","home_win_probability":0,"draw_probability":0,"away_win_probability":0,"confidence":"HIGH","predicted_score":"2-1","key_factor":"short phrase","home_strength":"short phrase","away_strength":"short phrase","reasoning":"3-4 sentences"}`;
+Respond ONLY with valid JSON in this exact format, no extra text, no markdown:
+{
+  "winner": "team name or DRAW",
+  "home_win_probability": number between 0 and 100,
+  "draw_probability": number between 0 and 100,
+  "away_win_probability": number between 0 and 100,
+  "confidence": "HIGH" or "MEDIUM" or "LOW",
+  "predicted_score": "e.g. 2-1",
+  "key_factor": "single most decisive factor in 6 words or less",
+  "home_strength": "one short phrase",
+  "away_strength": "one short phrase",
+  "reasoning": "3-4 sentence tactical reasoning explaining why this outcome is likely. Be specific about playing styles, form, and match context."
+}`;
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -34,9 +48,18 @@ Respond ONLY with valid JSON, no markdown:
     });
 
     const data = await response.json();
+
+    if (!response.ok) {
+      return res.status(500).json({ error: 'Anthropic API error: ' + JSON.stringify(data) });
+    }
+    if (!data.content) {
+      return res.status(500).json({ error: 'No content field: ' + JSON.stringify(data) });
+    }
+
     const raw = data.content.map(i => i.text || '').join('');
     const clean = raw.replace(/```json|```/g, '').trim();
     const result = JSON.parse(clean);
+
     res.status(200).json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
